@@ -1,0 +1,973 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Crédito - Financiamento estudantil",
+    "version": "1.0.1",
+    "description": "Serviço disponibilizado para que o orquestrador de fluxo (SINDA), notifique quando houver atualização no fluxo de validação de documento quando for enviado para aprovação.\n# Authentication\n<!-- ReDoc-Inject: <security-definitions> -->",
+    "contact": {
+      "name": "Equipe de Desenvolvimento",
+      "email": "cedesbr251@caixa.gov.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.des.caixa:8443/credito/fies",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/v1/renegociacao/notifica-atualizacao/": {
+      "description": "",
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificacaoAtualizada"
+              },
+              "examples": {
+                "Exemplo": {
+                  "value": "{\"numeroNegocio\": \"145512345\"}"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "Administrativo"
+        ],
+        "responses": {
+          "201": {
+            "description": "Sucesso na atualizacao da notificacao.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 201,
+                      "description": "Numero do negocio atualizado com sucesso."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identificação de token recebido não autorizado a utilizar a API.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 401,
+                      "description": "Token não reconhecido/validado pelo realm do SSO."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Token inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 403,
+                      "description": "Usuário cli não autorizado a utilizar esta API."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro negocial ou estrutural na chamada da API. Este erro pode ser causado por uma chamada utilizando formato inválido de JSON ou também por fornecimento de dados negociais inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 422,
+                      "description": "O numero do negocio fornecido é inválido."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 500,
+                      "description": "Ocorreu um erro inesperado. Tente novamente mais tarde."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "Intranet": []
+          }
+        ],
+        "summary": "Notifica atualizaçao através do numero de negocio.",
+        "description": "Notifica SIFES sobre atualização do numero de negocio."
+      }
+    },
+    "/v1/renegociacao/consulta/{cpf}": {
+      "get": {
+        "tags": [
+          "Renegociacao"
+        ],
+        "parameters": [
+          {
+            "name": "cpf",
+            "description": "CPF do estudante tomador.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso na consulta realizada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitacaoRenegociacaoContrato"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identificação de token recebido não autorizado a utilizar a API.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 401,
+                      "description": "Token não reconhecido/validado pelo realm do SSO."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Token inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                },
+                "examples": {
+                  "Exemplo": {
+                    "value": {
+                      "code": 403,
+                      "description": "Usuário cli não autorizado a utilizar esta API."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consulta não localizou contrato de renegociação pelo cpf informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                }
+              }
+            }
+          },
+          "412": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                }
+              }
+            },
+            "description": "Pré-condição falhou, o acesso ao recurso especificado foi negado. A condição definida pelo cabeçalho  não é satisfeita. Nesse caso, a requisição, geralmente um upload ou  modificação de um recurso, não pode ser feita e o código de error de resposta é enviado de volta."
+          },
+          "500": {
+            "description": "Erro interno do servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mensagem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Intranet": [
+              "scope"
+            ],
+            "APIKey": []
+          }
+        ],
+        "summary": "Consulta última solicitação de renegociacao.",
+        "description": "Consulta a última renegociacao solicitada através do CPF do estudante tomador."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Mensagem": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "description": "Codigo da mensagem",
+            "type": "integer"
+          },
+          "descricao": {
+            "description": "Descrição da mensagem",
+            "type": "string"
+          }
+        }
+      },
+      "NotificacaoAtualizada": {
+        "description": "JSON notifica atualizacao do numero de negocio",
+        "required": [
+          "numeroNegocio"
+        ],
+        "type": "object",
+        "properties": {
+          "numeroNegocio": {
+            "nullable": false,
+            "description": "numero do negocio",
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "example": "{\n    \"numeroNegocio\": \"145512345\"\n}"
+      },
+      "SolicitacaoRenegociacaoContrato": {
+        "description": "JSON retorna ultimo contrato de renegociação",
+        "required": [
+          "cpf"
+        ],
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "codigoSolicitacao": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "codigoRenegociacao": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dadosEstudante": {
+            "$ref": "#/components/schemas/DadosEstudante"
+          },
+          "dadosContrato": {
+            "$ref": "#/components/schemas/DadosContrato"
+          },
+          "dataLimite": {
+            "type": "string"
+          },
+          "dataSolicitacao": {
+            "type": "string"
+          },
+          "dataEnvio": {
+            "type": "string"
+          },
+          "dataRetorno": {
+            "type": "string"
+          },
+          "descricaoErroSiapi": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "enum": [
+              "ELABORACAO",
+              "ACEITO_AGUARDANDO_ENVIO_SIAPI",
+              "ENVIADO_SIAPI",
+              "PROCESSANDO_ATUALIZACAO",
+              "ERRO_SIAPI",
+              "REJEITADA",
+              "CANCELADA",
+              "FINALIZADA",
+              "AGUARDANDO_RESPOSTA_DOCUMENTOS",
+              "DOCUMENTO_EM_CONFORMIDADE",
+              "DOCUMENTO_EM_INCONFORMIDADE"
+            ]
+          },
+          "permiteTransacaoRenegociacao": {
+            "type": "boolean",
+            "default": false
+          },
+          "permiteTransacaoSimulacao": {
+            "type": "boolean",
+            "default": false
+          },
+          "nuTipoGarantia": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "simulacaoAdesao": {
+            "$ref": "#/components/schemas/SimulacaoRenegociacaoContrato"
+          },
+          "quantidadeParcelaAdesao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valorParcelaAdesao": {
+            "type": "number",
+            "format": "double"
+          },
+          "preSave": {
+            "type": "boolean",
+            "default": false
+          },
+          "documentosTomador": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentoUpload"
+            }
+          },
+          "documentosFiadores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FiadorDocumentoRenegociacao"
+            }
+          },
+          "numeroNegocioDossie": {
+            "type": "string"
+          },
+          "simulacoes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SimulacaoRenegociacaoContrato"
+            }
+          },
+          "dadosCadastraisAtualizado": {
+            "$ref": "#/components/schemas/DadosCadastraisEstudanteAtualizacaoContrato"
+          },
+          "situacaoEnumName": {
+            "type": "string"
+          }
+        }
+      },
+      "DadosEstudante": {
+        "description": "JSON retorna ultimo contrato de renegociação",
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "nome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "codFies": {
+            "type": "string"
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/Mensagem"
+          },
+          "telefoneResidencial": {
+            "type": "string"
+          },
+          "celular": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "estadoCivil": {
+            "type": "string"
+          },
+          "rg": {
+            "type": "string"
+          },
+          "dataEmissao": {
+            "type": "string"
+          },
+          "deOrgaoExpedidorRg": {
+            "type": "string"
+          },
+          "nomeConjuge": {
+            "type": "string"
+          },
+          "cpfConjuge": {
+            "type": "string"
+          },
+          "dataNascimentoConjuge": {
+            "type": "string"
+          },
+          "nacionalidadeConjuge": {
+            "type": "string"
+          },
+          "rgConjuge": {
+            "type": "string"
+          },
+          "ufConjuge": {
+            "type": "string"
+          },
+          "orgaoExpedidorRgConjuge": {
+            "$ref": "#/components/schemas/OrgaoExpedidor"
+          },
+          "dataEmissaoConjuge": {
+            "type": "string"
+          },
+          "ricConjuge": {
+            "type": "string"
+          },
+          "tipoComprovanteResidencia": {
+            "type": "string"
+          },
+          "arquivoComprovanteResidencia": {
+            "type": "string"
+          },
+          "arquivoCertidaoCasamento": {
+            "type": "string"
+          },
+          "tipoIdentificacaoConjuge": {
+            "type": "string"
+          },
+          "arquivoIdentificacaoConjuge": {
+            "type": "string"
+          },
+          "datatEmissaoConjuge": {
+            "type": "string"
+          }
+        }
+      },
+      "OrgaoExpedidor": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "DadosContrato": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "numero": {
+            "type": "string"
+          },
+          "numeroOperacao": {
+            "type": "string"
+          }
+        }
+      },
+      "SimulacaoRenegociacaoContrato": {
+        "type": "object",
+        "properties": {
+          "tipoRenegociacao": {
+            "$ref": "#/components/schemas/TipoRenegociacao"
+          },
+          "diasAtraso": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "diasAtrasoMP": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valorDividaTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorEncargosAtraso": {
+            "type": "number",
+            "format": "double"
+          },
+          "percentualDescontoEncargos": {
+            "type": "number",
+            "format": "double"
+          },
+          "percentualDescontoTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorDescontoEncargos": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorDescontoTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantidadeParcelas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valorDivida": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorMinimoParcela": {
+            "type": "number",
+            "format": "double"
+          },
+          "dataMovimentoSimulacao": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tipoRenegociacaoEnum": {
+            "type": "string",
+            "enum": [
+              "LIQUIDACAO",
+              "PARCELAMENTO_MENSAL",
+              "LIQUIDACAO_CADUNICO_AE",
+              "LIQUIDACAO_SEM_CADUNICO_AE"
+            ]
+          }
+        }
+      },
+      "TipoRenegociacao": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "selic": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "DocumentoUpload": {
+        "type": "object",
+        "properties": {
+          "codigoDocumento": {
+            "type": "string"
+          },
+          "binarioBase64": {
+            "type": "string"
+          }
+        }
+      },
+      "FiadorDocumentoRenegociacao": {
+        "type": "object",
+        "properties": {
+          "fiador": {
+            "$ref": "#/components/schemas/Fiador"
+          },
+          "documentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentoUpload"
+            }
+          }
+        }
+      },
+      "Fiador": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "dependenteCPF": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string"
+          },
+          "ric": {
+            "type": "string"
+          },
+          "nacionalidade": {
+            "$ref": "#/components/schemas/Nacionalidade"
+          },
+          "identidade": {
+            "$ref": "#/components/schemas/Identidade"
+          },
+          "estadoCivil": {
+            "$ref": "#/components/schemas/EstadoCivil"
+          },
+          "regimeBens": {
+            "$ref": "#/components/schemas/RegimeBens"
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/Endereco"
+          },
+          "contato": {
+            "$ref": "#/components/schemas/Contato"
+          },
+          "vinculacao": {
+            "type": "string"
+          },
+          "conjuge": {
+            "$ref": "#/components/schemas/Conjuge"
+          },
+          "sequencial": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigoFies": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "emancipado": {
+            "$ref": "#/components/schemas/Emancipado"
+          },
+          "valorRendaMensal": {
+            "type": "number",
+            "format": "float"
+          },
+          "codigoProfissao": {
+            "type": "string"
+          },
+          "dataExpedicaoIdentidadeFiador": {
+            "type": "string"
+          },
+          "codigoSolicitacao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Nacionalidade": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "Identidade": {
+        "type": "object",
+        "properties": {
+          "identidade": {
+            "type": "string"
+          },
+          "orgaoExpedidor": {
+            "$ref": "#/components/schemas/OrgaoExpedidor"
+          },
+          "uf": {
+            "$ref": "#/components/schemas/Mensagem"
+          },
+          "dataExpedicaoIdentidade": {
+            "type": "string"
+          }
+        }
+      },
+      "Emancipado": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "Conjuge": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "dependenteCPF": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string"
+          },
+          "ric": {
+            "type": "string"
+          },
+          "nacionalidade": {
+            "$ref": "#/components/schemas/Nacionalidade"
+          },
+          "identidade": {
+            "$ref": "#/components/schemas/Identidade"
+          },
+          "estadoCivil": {
+            "$ref": "#/components/schemas/EstadoCivil"
+          },
+          "regimeBens": {
+            "$ref": "#/components/schemas/RegimeBens"
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/Endereco"
+          },
+          "contato": {
+            "$ref": "#/components/schemas/Contato"
+          },
+          "vinculacao": {
+            "type": "string"
+          }
+        }
+      },
+      "EstadoCivil": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "possuiConjuge": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "RegimeBens": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "Endereco": {
+        "type": "object",
+        "properties": {
+          "endereco": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "bairro": {
+            "type": "string"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "cidade": {
+            "$ref": "#/components/schemas/Cidade"
+          }
+        }
+      },
+      "Cidade": {
+        "type": "object",
+        "properties": {
+          "codigoCidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "uf": {
+            "$ref": "#/components/schemas/Mensagem"
+          }
+        }
+      },
+      "Contato": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "telefoneResidencial": {
+            "$ref": "#/components/schemas/Telefone"
+          },
+          "telefoneCelular": {
+            "$ref": "#/components/schemas/Telefone"
+          },
+          "telefoneComercial": {
+            "$ref": "#/components/schemas/Telefone"
+          }
+        }
+      },
+      "Telefone": {
+        "type": "object",
+        "properties": {
+          "ddd": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          }
+        }
+      },
+      "DadosCadastraisEstudanteAtualizacaoContrato": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "codigo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "editavel": {
+            "type": "boolean",
+            "default": false
+          },
+          "dadosEstudante": {
+            "$ref": "#/components/schemas/DadosEstudante"
+          },
+          "dadosContrato": {
+            "$ref": "#/components/schemas/DadosContrato"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Intranet": {
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://login.des.caixa/auth/realms/intranet/protocol/openid-connect/token",
+            "refreshUrl": "https://login.des.caixa/auth/realms/intranet/protocol/openid-connect/token",
+            "scopes": {
+              "scope": ""
+            }
+          }
+        },
+        "type": "oauth2",
+        "description": "Tokens emitidos pelo realm INTRANET"
+      },
+      "APIKey": {
+        "type": "apiKey",
+        "description": "API Key do sistema que está chamando esta API.",
+        "name": "APIKey",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "APIKey": [],
+      "Intranet": [
+        "scope"
+      ]
+    }
+  ]
+}
