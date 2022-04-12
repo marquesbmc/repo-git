@@ -1,0 +1,1290 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API que disponibiliza as funcionalidades da renegociacao 2022",
+    "version" : "v1",
+    "title" : "SIFES API RENEGOCIACAO"
+  },
+  "paths" : {
+    "/api/v1/renegociacao" : {
+      "post" : {
+        "summary" : "Este serviço deve permitir a criação de uma solicitacao de renegociacao.",
+        "description" : "O campo de entrada deve ser o objeto SolicitacaoRenegociacaoContrato",
+        "operationId" : "salvarSolicitacaoRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/candidato/{nuCandidato}" : {
+      "get" : {
+        "summary" : "Consulta Candidato pelo codigo FIES",
+        "description" : "O campo de entrada deve ser o codigo Fies",
+        "operationId" : "buscarDadosCadastrais",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "nuCandidato",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/DadosCadastraisEstudanteAtualizacaoContrato"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/simulacao/detalhe" : {
+      "get" : {
+        "summary" : "Este serviço deve permitir a consulta do detalhe da simulacao selecionada pelo usuario.",
+        "description" : "Os campos de entrada devem ser o Numero do Candidato(Codigo FIES), tipo de renegociacao, numero de parcelas e quantidade maxima de simulacao que sera listadas",
+        "operationId" : "consultarDetalhamentoRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "nuCandidato",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tipoRenegociacao",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "numeroParcela",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "quantidadeMaximaDetalhes",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/DetalheParcelamentoRenegociacao"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/simulacao/valorParcela" : {
+      "get" : {
+        "summary" : "Este serviço deve permitir a consulta do valor de uma parcela selecionada.",
+        "description" : "Os campos de entrada devem ser o Numero do Candidato(Codigo FIES), tipo de renegociacao, numero de parcelas",
+        "operationId" : "buscarValorParcela",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "nuCandidato",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tipoRenegociacao",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "quantidadeParcelas",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/ValorRetorno"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/simulacao/{cpf}" : {
+      "get" : {
+        "summary" : "Este serviço deve permitir a consulta de uma simulacao de renegociacao do cpf informado.",
+        "description" : "O campo de entrada deve ser o CPF do tomador, neste caso do estudante",
+        "operationId" : "simular",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/SimulacaoRenegociacaoContrato"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/{codigoSolicitacao}/candidato/{codigoFies}/fiador " : {
+      "get" : {
+        "summary" : "Busca a listas dos fiadores da renegociacao por codigo FIES do candidato e codigo da solicitacao",
+        "description" : "Os campos de entrada devem ser o Numero do Candidato(Codigo FIES), numero da solicitacao de renegociacao",
+        "operationId" : "consultarFiadoresDisponiveisRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "codigoFies",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codigoSolicitacao",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/Fiador"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Este serviço deve permitir incluir um fiador a renegociacao",
+        "description" : "O campo de entrada deve ser o objeto fiador, codigo do FIES e codigo da solicitacao",
+        "operationId" : "salvar",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "codigoFies",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codigoSolicitacao",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/{codigoSolicitacao}/candidato/{codigoFies}/fiador/{cpf} " : {
+      "get" : {
+        "summary" : "Busca um fiador da renegociacao por codigo FIES do candidato e codigo da solicitacao",
+        "description" : "Os campos de entrada devem ser o Numero do Candidato(Codigo FIES), numero da solicitacao de renegociacao, cpf do fiador",
+        "operationId" : "consultarFiadoresDisponiveisRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "codigoFies",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codigoSolicitacao",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/Fiador"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Este serviço deve permitir excluir um fiador a renegociacao",
+        "description" : "O campo de entrada deve ser o cpf do fiador, codigo do FIES e codigo da solicitacao",
+        "operationId" : "excluir",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "codigoFies",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codigoSolicitacao",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/{cpf}" : {
+      "get" : {
+        "summary" : "Este serviço deve permitir a consulta da ultima renegociacao solicitada ou que foi iniciado o processo.",
+        "description" : "O campo de entrada deve ser o CPF do tomador, neste caso do estudante",
+        "operationId" : "consultarUltimaSolicitacaoRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/SolicitacaoRenegociacaoContrato"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/{cpf}/boleto" : {
+      "get" : {
+        "summary" : "O boleto de entrada",
+        "description" : "O campo de entrada deve ser o codigo Fies",
+        "operationId" : "reimprimirBoleto",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/BoletoRegistradoSaida"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/renegociacao/{cpf}/finalizar" : {
+      "post" : {
+        "summary" : "Envia o pedido de finalizacao da renegociacao para permitir a geração do boleto de entrada",
+        "description" : "O campo de entrada deve ser o cpf do tomador",
+        "operationId" : "executarAdesaoRenegociacao",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucesso",
+            "schema" : {
+              "$ref" : "#/definitions/RetornoAdesaoNegociacao"
+            }
+          },
+          "404" : {
+            "description" : "Não encontrado"
+          },
+          "412" : {
+            "description" : "Pré-condição falhou",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          },
+          "500" : {
+            "description" : "Erro interno do servidor",
+            "schema" : {
+              "$ref" : "#/definitions/Retorno"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "BoletoRegistradoSaida" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "message" : {
+          "type" : "string"
+        },
+        "urlBoleto" : {
+          "type" : "string"
+        },
+        "messages" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Retorno"
+          }
+        }
+      }
+    },
+    "Cidade" : {
+      "type" : "object",
+      "properties" : {
+        "codigoCidade" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "uf" : {
+          "$ref" : "#/definitions/Retorno"
+        }
+      }
+    },
+    "Conjuge" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "dependenteCPF" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "dataNascimento" : {
+          "type" : "string"
+        },
+        "ric" : {
+          "type" : "string"
+        },
+        "nacionalidade" : {
+          "$ref" : "#/definitions/Nacionalidade"
+        },
+        "identidade" : {
+          "$ref" : "#/definitions/Identidade"
+        },
+        "estadoCivil" : {
+          "$ref" : "#/definitions/EstadoCivil"
+        },
+        "regimeBens" : {
+          "$ref" : "#/definitions/RegimeBens"
+        },
+        "endereco" : {
+          "$ref" : "#/definitions/Endereco"
+        },
+        "contato" : {
+          "$ref" : "#/definitions/Contato"
+        },
+        "vinculacao" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Contato" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string"
+        },
+        "telefoneResidencial" : {
+          "$ref" : "#/definitions/Telefone"
+        },
+        "telefoneCelular" : {
+          "$ref" : "#/definitions/Telefone"
+        },
+        "telefoneComercial" : {
+          "$ref" : "#/definitions/Telefone"
+        }
+      }
+    },
+    "DadosCadastraisEstudanteAtualizacaoContrato" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "dadosEstudante" : {
+          "$ref" : "#/definitions/DadosEstudante"
+        },
+        "dadosContrato" : {
+          "$ref" : "#/definitions/DadosContrato"
+        }
+      }
+    },
+    "DadosContrato" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "numero" : {
+          "type" : "string"
+        },
+        "numeroOperacao" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DadosEstudante" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "codFies" : {
+          "type" : "string"
+        },
+        "endereco" : {
+          "$ref" : "#/definitions/Retorno"
+        },
+        "telefoneResidencial" : {
+          "type" : "string"
+        },
+        "celular" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "estadoCivil" : {
+          "type" : "string"
+        },
+        "rg" : {
+          "type" : "string"
+        },
+        "dataEmissao" : {
+          "type" : "string"
+        },
+        "deOrgaoExpedidorRg" : {
+          "type" : "string"
+        },
+        "nomeConjuge" : {
+          "type" : "string"
+        },
+        "cpfConjuge" : {
+          "type" : "string"
+        },
+        "dataNascimentoConjuge" : {
+          "type" : "string"
+        },
+        "nacionalidadeConjuge" : {
+          "type" : "string"
+        },
+        "rgConjuge" : {
+          "type" : "string"
+        },
+        "ufConjuge" : {
+          "type" : "string"
+        },
+        "orgaoExpedidorRgConjuge" : {
+          "$ref" : "#/definitions/OrgaoExpedidor"
+        },
+        "dataEmissaoConjuge" : {
+          "type" : "string"
+        },
+        "ricConjuge" : {
+          "type" : "string"
+        },
+        "tipoComprovanteResidencia" : {
+          "type" : "string"
+        },
+        "arquivoComprovanteResidencia" : {
+          "type" : "string"
+        },
+        "arquivoCertidaoCasamento" : {
+          "type" : "string"
+        },
+        "tipoIdentificacaoConjuge" : {
+          "type" : "string"
+        },
+        "arquivoIdentificacaoConjuge" : {
+          "type" : "string"
+        },
+        "datatEmissaoConjuge" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DetalheParcelamentoRenegociacao" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "quantidadeParcelas" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "valorParcela" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "dataMovimento" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DocumentoUpload" : {
+      "type" : "object",
+      "properties" : {
+        "codigoDocumento" : {
+          "type" : "string"
+        },
+        "binarioBase64" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Emancipado" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "string"
+        },
+        "descricao" : {
+          "type" : "string"
+        },
+        "nome" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Endereco" : {
+      "type" : "object",
+      "properties" : {
+        "endereco" : {
+          "type" : "string"
+        },
+        "numero" : {
+          "type" : "string"
+        },
+        "bairro" : {
+          "type" : "string"
+        },
+        "cep" : {
+          "type" : "string"
+        },
+        "cidade" : {
+          "$ref" : "#/definitions/Cidade"
+        }
+      }
+    },
+    "EstadoCivil" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "possuiConjuge" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "Fiador" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "dependenteCPF" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "dataNascimento" : {
+          "type" : "string"
+        },
+        "ric" : {
+          "type" : "string"
+        },
+        "nacionalidade" : {
+          "$ref" : "#/definitions/Nacionalidade"
+        },
+        "identidade" : {
+          "$ref" : "#/definitions/Identidade"
+        },
+        "estadoCivil" : {
+          "$ref" : "#/definitions/EstadoCivil"
+        },
+        "regimeBens" : {
+          "$ref" : "#/definitions/RegimeBens"
+        },
+        "endereco" : {
+          "$ref" : "#/definitions/Endereco"
+        },
+        "contato" : {
+          "$ref" : "#/definitions/Contato"
+        },
+        "vinculacao" : {
+          "type" : "string"
+        },
+        "conjuge" : {
+          "$ref" : "#/definitions/Conjuge"
+        },
+        "sequencial" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "codigoFies" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "emancipado" : {
+          "$ref" : "#/definitions/Emancipado"
+        },
+        "valorRendaMensal" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "codigoProfissao" : {
+          "type" : "string"
+        },
+        "dataExpedicaoIdentidadeFiador" : {
+          "type" : "string"
+        },
+        "codigoSolicitacao" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "FiadorDocumentoRenegociacao" : {
+      "type" : "object",
+      "properties" : {
+        "fiador" : {
+          "$ref" : "#/definitions/Fiador"
+        },
+        "documentos" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DocumentoUpload"
+          }
+        }
+      }
+    },
+    "Identidade" : {
+      "type" : "object",
+      "properties" : {
+        "identidade" : {
+          "type" : "string"
+        },
+        "orgaoExpedidor" : {
+          "$ref" : "#/definitions/OrgaoExpedidor"
+        },
+        "uf" : {
+          "$ref" : "#/definitions/Retorno"
+        },
+        "dataExpedicaoIdentidade" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Nacionalidade" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "string"
+        },
+        "nome" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OrgaoExpedidor" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RegimeBens" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nome" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Retorno" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "RetornoAdesaoNegociacao" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "permiteImprimirTermo" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "permiteImprimirBoleto" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "situacaoSolicitacao" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Serializable" : {
+      "type" : "object"
+    },
+    "SimulacaoRenegociacaoContrato" : {
+      "type" : "object",
+      "properties" : {
+        "tipoRenegociacao" : {
+          "$ref" : "#/definitions/TipoRenegociacao"
+        },
+        "diasAtraso" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "diasAtrasoMP" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "valorDividaTotal" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "valorEncargosAtraso" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "percentualDescontoEncargos" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "percentualDescontoTotal" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "valorDescontoEncargos" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "valorDescontoTotal" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "quantidadeParcelas" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "valorDivida" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "valorMinimoParcela" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "dataMovimentoSimulacao" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "tipoRenegociacaoEnum" : {
+          "type" : "string",
+          "enum" : [ "LIQUIDACAO", "PARCELAMENTO_MENSAL", "LIQUIDACAO_CADUNICO_AE", "LIQUIDACAO_SEM_CADUNICO_AE" ]
+        }
+      }
+    },
+    "SolicitacaoRenegociacaoContrato" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "codigoSolicitacao" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "codigoRenegociacao" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "dadosEstudante" : {
+          "$ref" : "#/definitions/DadosEstudante"
+        },
+        "dadosContrato" : {
+          "$ref" : "#/definitions/DadosContrato"
+        },
+        "dataLimite" : {
+          "type" : "string"
+        },
+        "dataSolicitacao" : {
+          "type" : "string"
+        },
+        "dataEnvio" : {
+          "type" : "string"
+        },
+        "dataRetorno" : {
+          "type" : "string"
+        },
+        "descricaoErroSiapi" : {
+          "type" : "string"
+        },
+        "situacao" : {
+          "type" : "string",
+          "enum" : [ "ELABORACAO", "ACEITO_AGUARDANDO_ENVIO_SIAPI", "ENVIADO_SIAPI", "PROCESSANDO_ATUALIZACAO", "ERRO_SIAPI", "REJEITADA", "CANCELADA", "FINALIZADA", "AGUARDANDO_RESPOSTA_DOCUMENTOS", "DOCUMENTO_EM_CONFORMIDADE", "DOCUMENTO_EM_INCONFORMIDADE" ]
+        },
+        "permiteTransacaoRenegociacao" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "permiteTransacaoSimulacao" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "nuTipoGarantia" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "simulacaoAdesao" : {
+          "$ref" : "#/definitions/SimulacaoRenegociacaoContrato"
+        },
+        "quantidadeParcelaAdesao" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "valorParcelaAdesao" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "preSave" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "documentosTomador" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DocumentoUpload"
+          }
+        },
+        "documentosFiadores" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FiadorDocumentoRenegociacao"
+          }
+        },
+        "numeroNegocioDossie" : {
+          "type" : "string"
+        },
+        "simulacoes" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SimulacaoRenegociacaoContrato"
+          }
+        },
+        "dadosCadastraisAtualizado" : {
+          "$ref" : "#/definitions/DadosCadastraisEstudanteAtualizacaoContrato"
+        },
+        "situacaoEnumName" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Telefone" : {
+      "type" : "object",
+      "properties" : {
+        "ddd" : {
+          "type" : "string"
+        },
+        "numero" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TipoRenegociacao" : {
+      "type" : "object",
+      "properties" : {
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "descricao" : {
+          "type" : "string"
+        },
+        "selic" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "ValorRetorno" : {
+      "type" : "object",
+      "properties" : {
+        "mensagem" : {
+          "type" : "string"
+        },
+        "codigo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "tipo" : {
+          "type" : "string"
+        },
+        "editavel" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "valor" : {
+          "$ref" : "#/definitions/Serializable"
+        }
+      }
+    }
+  }
+}

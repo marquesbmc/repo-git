@@ -1,0 +1,137 @@
+openapi: 3.0.1
+info:
+  title: Crédito - Financiamento estudantil
+  version: 1.0.1
+  description: |-
+    Serviço disponibilizado para que o orquestrador de fluxo (SINDA), notifique quando houver atualização no fluxo de validação de documento quando for enviado para aprovação.
+
+    # Authentication
+
+    <!-- ReDoc-Inject: <security-definitions> -->
+  contact:
+    name: Equipe de Desenvolvimento
+    email: cedesbr251@caixa.gov.br
+servers:
+  - url: https://api.des.caixa:8443/credito/fies
+    description: ''
+paths:
+  /v1/renegociacao/notifica-atualizacao/:
+    description: ''
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificacaoAtualizada'
+            examples:
+              Exemplo:
+                value: '{"numeroNegocio": "145512345"}'
+        required: true
+      tags:
+        - Administrativo
+      responses:
+        '201':
+          description: Sucesso na atualizacao da notificacao.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+              examples:
+                Exemplo:
+                  value:
+                    code: 201
+                    description: Numero do negocio atualizado com sucesso.
+        '401':
+          description: Identificação de token recebido não autorizado a utilizar a API.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+              examples:
+                Exemplo:
+                  value:
+                    code: 401
+                    description: Token não reconhecido/validado pelo realm do SSO.
+        '403':
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+              examples:
+                Exemplo:
+                  value:
+                    code: 403
+                    description: Usuário cli não autorizado a utilizar esta API.
+        '422':
+          description: Erro negocial ou estrutural na chamada da API. Este erro pode ser causado por uma chamada utilizando formato inválido de JSON ou também por fornecimento de dados negociais inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+              examples:
+                Exemplo:
+                  value:
+                    code: 422
+                    description: O numero do negocio fornecido é inválido.
+        '500':
+          description: Ocorreu um erro inesperado. Tente novamente mais tarde.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+              examples:
+                Exemplo:
+                  value:
+                    code: 500
+                    description: Ocorreu um erro inesperado. Tente novamente mais tarde.
+      security:
+        - APIKey: []
+          Intranet: []
+      summary: Notifica atualizaçao através do numero de negocio.
+      description: Notifica SIFES sobre atualização do numero de negocio.
+components:
+  schemas:
+    Mensagem:
+      type: object
+      properties:
+        codigo:
+          description: Codigo da mensagem
+          type: integer
+        descricao:
+          description: Descrição da mensagem
+          type: string
+    NotificacaoAtualizada:
+      description: JSON notifica atualizacao do numero de negocio
+      required:
+        - numeroNegocio
+      type: object
+      properties:
+        numeroNegocio:
+          nullable: false
+          description: numero do negocio
+          type: integer
+      additionalProperties: false
+      example: |-
+        {
+            "numeroNegocio": "145512345"
+        }
+  securitySchemes:
+    Intranet:
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.des.caixa/auth/realms/intranet/protocol/openid-connect/token
+          refreshUrl: https://login.des.caixa/auth/realms/intranet/protocol/openid-connect/token
+          scopes:
+            scope: ''
+      type: oauth2
+      description: Tokens emitidos pelo realm INTRANET
+    APIKey:
+      type: apiKey
+      description: API Key do sistema que está chamando esta API.
+      name: APIKey
+      in: header
+security:
+  - APIKey: []
+    Intranet:
+      - scope
